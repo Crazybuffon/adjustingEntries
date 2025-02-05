@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accounting 101: Adjusting Entries & Financial Statements Practice</title>
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🎓  Accounting101 Game: Adjusting Entries and Financial Statements</h1>
+
+  <p class="developed-by">
+    👩‍🏫 Developed by <strong>Professor Grace Haoqing Fan</strong>,
+    <strong>Singapore Management University</strong>
+  </p>
+
+  <div class="intro">
+    <p>
+      Welcome! As a member of the accounting team at SMUTech Solutions Ltd.,
+      a dynamic technology company based in Singapore, your responsibility is
+      to prepare the monthly financial statements by recording the necessary
+      adjusting entries. You have been provided with a previous Trial Balance
+      and five new scenarios that require your expertise to ensure the
+      company's financial records are accurate and reflect the true financial
+      position at month-end.<br><br>
+      <strong>The Scenarios:</strong>
+    </p>
+  </div>
+
+  <div class="scenarios-row" id="scenariosRow"></div>
+
+  <div class="tab-container">
+    <button class="tab active" onclick="openTab('trialBalanceTab', this)">📊 Trial Balance</button>
+    <button id="isTabBtn" class="tab" onclick="openTab('incomeStatementTab', this)" disabled>
+      📝 Income Statement
+    </button>
+    <button id="ceTabBtn" class="tab" onclick="openTab('closingEntriesTab', this)" disabled>
+      🔒 Closing Entries
+    </button>
+    <button id="bsTabBtn" class="tab" onclick="openTab('balanceSheetTab', this)" disabled>📄 Balance Sheet</button>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       TRIAL BALANCE TAB
+       ──────────────────────────────────────────────────── -->
+  <div id="trialBalanceTab" class="content active">
+    <h2>Trial Balance</h2>
+    <p>
+      Make your adjustments for the 5 scenarios above
+      (adding rows if needed). Then click "Check TB Answer." If necessary, "Re-do"
+      reverts to the original.
+    </p>
+
+    <table class="compact-table">
+      <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Debit ($)</th>
+          <th>Credit ($)</th>
+        </tr>
+      </thead>
+      <tbody id="trialBalanceRows"></tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td>Totals</td>
+          <td id="tbTotalDebit">0.00</td>
+          <td id="tbTotalCredit">0.00</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <button onclick="addTrialBalanceRow()">➕ Add Row</button>
+    <button onclick="checkTrialBalance()">✅ Check TB Answer</button>
+    <button onclick="redoTrialBalance()">🔄 Re-do</button>
+    <button onclick="showCorrectAnswer()">📝 Show Correct Answer</button>
+    <div id="tbResult" class="result"></div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       INCOME STATEMENT TAB
+       ──────────────────────────────────────────────────── -->
+  <div id="incomeStatementTab" class="content">
+    <h2>Income Statement</h2>
+
+    <p class="intro">
+      Use the Adjusted Trial Balance below to fill out
+      the Income Statement. Once ready, click the "Check Income Statement" button.
+      <br><br>
+      <strong>How to Calculate the Income Statement:</strong>
+      Sum up all revenues and subtract the Cost of Goods Sold to get Gross Profit.
+      Subtract operating expenses to get Operating Income, then deduct interest expense
+      and taxes to arrive at Net Income.
+    </p>
+
+    <!-- Read-only TB (draggable) -->
+    <div class="statement">
+      <h3>Adjusted Trial Balance</h3>
+      <div id="readOnlyTB" class="compact-table"></div>
+    </div>
+
+    <!-- Income Statement (with drop zones for Revenue & OpEx) -->
+    <div class="statement">
+      <h3 style="text-align:center;">
+        Income Statement<br><small>(For the period ended ...)</small>
+      </h3>
+
+      <table class="fs-table">
+        <tbody>
+          <!-- REVENUE ROW -->
+          <tr>
+            <td>
+              <strong>Revenue</strong>
+              <div id="revenueDropZone" class="drop-zone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnZone(event, 'revenue')">
+                <span class="placeholder-text">(drag the revenue accounts here)</span>
+                <div id="revenueAccounts" class="dropped-items"></div>
+              </div>
+            </td>
+            <td>
+              <input type="number" id="isRevenue" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isRevenue')">?</button>
+            </td>
+          </tr>
+
+          <!-- COGS ROW -->
+          <tr>
+            <td>Less: Cost of Goods Sold</td>
+            <td>
+              <input type="number" id="isCOGS" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isCOGS')">?</button>
+            </td>
+          </tr>
+
+          <!-- GROSS PROFIT -->
+          <tr class="separator">
+            <td><strong>Gross Profit</strong></td>
+            <td>
+              <input type="number" id="isGrossProfit" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isGrossProfit')">?</button>
+            </td>
+          </tr>
+
+          <!-- OPERATING EXPENSES -->
+          <tr>
+            <td>
+              Less: Operating Expenses
+              <div id="opExDropZone" class="drop-zone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnZone(event, 'opEx')">
+                <span class="placeholder-text">(drag the expense accounts here)</span>
+                <div id="opExAccounts" class="dropped-items"></div>
+              </div>
+            </td>
+            <td>
+              <input type="number" id="isOpEx" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isOpEx')">?</button>
+            </td>
+          </tr>
+
+          <!-- OPERATING INCOME -->
+          <tr class="separator">
+            <td><strong>Operating Income</strong></td>
+            <td>
+              <input type="number" id="isOpIncome" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isOpIncome')">?</button>
+            </td>
+          </tr>
+
+          <!-- INTEREST EXPENSE -->
+          <tr>
+            <td>Less: Interest Expense</td>
+            <td>
+              <input type="number" id="isInterestExp" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isInterestExp')">?</button>
+            </td>
+          </tr>
+
+          <!-- INCOME BEFORE TAX -->
+          <tr class="separator">
+            <td><strong>Income Before Tax</strong></td>
+            <td>
+              <input type="number" id="isIncomeBeforeTax" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isIncomeBeforeTax')">?</button>
+            </td>
+          </tr>
+
+          <!-- TAX EXPENSE -->
+          <tr>
+            <td>Less: Tax Expense</td>
+            <td>
+              <input type="number" id="isTaxExpense" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isTaxExpense')">?</button>
+            </td>
+          </tr>
+
+          <!-- NET INCOME -->
+          <tr class="separator">
+            <td><strong>Net Income</strong></td>
+            <td>
+              <input type="number" id="isNetIncome" step="0.01">
+              <button class="hint-btn" onclick="showFSHint('isNetIncome')">?</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button onclick="checkIncomeStatement()">✅ Check Income Statement</button>
+      <button onclick="showCorrectIS()">📝 Show Correct IS</button>
+      <div id="isResult" class="result"></div>
+    </div>
+  </div>
+
+  <!-- CLOSING ENTRIES TAB -->
+  <div id="closingEntriesTab" class="content">
+    <h2>Closing Entries</h2>
+    <p class="intro">
+      A closing entry is a journal entry made at the end of an accounting period. It involves shifting data from temporary accounts on the income statement to permanent accounts on the balance sheet. Temporary accounts include revenue, expenses, and dividends. 
+    </p>
+    <table class="compact-table" id="closingEntriesTable">
+      <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Debit ($)</th>
+          <th>Credit ($)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td>Totals</td>
+          <td id="ceTotalDebit">0.00</td>
+          <td id="ceTotalCredit">0.00</td>
+        </tr>
+      </tfoot>
+    </table>
+    <button onclick="checkClosingEntries()">✅ Check Closing Entries</button>
+    <button onclick="showClosingHint()">💡 Hint</button>
+    <div id="ceResult" class="result"></div>
+  </div>
+
+
+  <!-- BALANCE SHEET TAB -->
+  <div id="balanceSheetTab" class="content">
+    <h2>Balance Sheet</h2>
+    <p class="intro">
+      Use the Adjusted Trial Balance below to classify accounts. 
+      Each subcategory shows its subtotal on the right, with individual accounts listed below. 
+      <br><br>
+      <strong>How to Do the Balance Sheet:</strong>
+      Ensure that Total Assets = Total Liabilities + Equity. Break down Assets into current
+      and non-current, Liabilities into current and long-term, and include both paid-in capital (stock)
+      and retained earnings in Equity.
+    </p>
+
+    <!-- The read-only TB side -->
+    <div class="statement">
+      <h3>Adjusted Trial Balance</h3>
+      <div id="readOnlyTB_BS" class="compact-table"></div>
+    </div>
+
+    <!-- The "real" balance sheet layout -->
+    <div class="statement">
+      <h3 style="text-align:center;">
+        Balance Sheet<br><small>(As of ...)</small>
+      </h3>
+
+      <table class="fs-table real-bs-table">
+        <tbody>
+          <!-- ASSETS -->
+          <tr class="section-header">
+            <td colspan="1"><strong>ASSETS</strong></td>
+          </tr>
+
+          <!-- Current Assets -->
+          <tr>
+            <td class="bs-subcat-cell">
+              <div class="bs-subcat-header drop-zone" 
+                   id="bsCurrentAssetsDropZone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnBSZone(event, 'currentAssets')">
+                <strong>Current Assets</strong>
+                <span class="subcat-total-right">
+                  <strong id="bsCurrentAssetsTotal">0.00</strong>
+                </span>
+
+                <span class="placeholder-text" id="bsCurrentAssetsPlaceholder">(drag accounts for current assets here)</span>
+              </div>
+              <!-- The list of dropped accounts goes below subcat header -->
+              <table class="inner-bs-table">
+                <tbody id="bsCurrentAssetsAccounts"></tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Non-Current Assets -->
+          <tr>
+            <td class="bs-subcat-cell">
+              <div class="bs-subcat-header drop-zone"
+                   id="bsNonCurrentAssetsDropZone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnBSZone(event, 'nonCurrentAssets')">
+                <strong>Non-Current Assets</strong>
+                <span class="subcat-total-right">
+                  <strong id="bsNonCurrentAssetsTotal">0.00</strong>
+                </span>
+
+                <span class="placeholder-text" id="bsNonCurrentAssetsPlaceholder">(drag accounts for non-current assets here)</span>
+              </div>
+              <table class="inner-bs-table">
+                <tbody id="bsNonCurrentAssetsAccounts"></tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Total Assets -->
+          <tr class="separator">
+            <td>
+              <strong>Total Assets</strong>
+              <span class="subcat-total-right"><strong id="bsTotalAssets">0.00</strong></span>
+            </td>
+          </tr>
+
+          <!-- LIABILITIES -->
+          <tr class="section-header">
+            <td><strong>LIABILITIES</strong></td>
+          </tr>
+
+          <!-- Current Liabilities -->
+          <tr>
+            <td class="bs-subcat-cell">
+              <div class="bs-subcat-header drop-zone"
+                   id="bsCurrentLiabDropZone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnBSZone(event, 'currentLiabilities')">
+                <strong>Current Liabilities</strong>
+                <span class="subcat-total-right">
+                  <strong id="bsCurrentLiabTotal">0.00</strong>
+                </span>
+
+                <span class="placeholder-text" id="bsCurrentLiabPlaceholder">(drag accounts for current liabilities here)</span>
+              </div>
+              <table class="inner-bs-table">
+                <tbody id="bsCurrentLiabAccounts"></tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Long-Term Liabilities -->
+          <tr>
+            <td class="bs-subcat-cell">
+              <div class="bs-subcat-header drop-zone"
+                   id="bsLongTermLiabDropZone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnBSZone(event, 'longTermLiabilities')">
+                <strong>Long-Term Liabilities</strong>
+                <span class="subcat-total-right">
+                  <strong id="bsLongTermLiabTotal">0.00</strong>
+                </span>
+
+                <span class="placeholder-text" id="bsLongTermLiabPlaceholder">(drag accounts for long-term liabilities here)</span>
+              </div>
+              <table class="inner-bs-table">
+                <tbody id="bsLongTermLiabAccounts"></tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Total Liabilities -->
+          <tr class="separator">
+            <td>
+              <strong>Total Liabilities</strong>
+              <span class="subcat-total-right"><strong id="bsTotalLiab">0.00</strong></span>
+            </td>
+          </tr>
+
+          <!-- EQUITY -->
+          <tr class="section-header">
+            <td><strong>EQUITY</strong></td>
+          </tr>
+
+          <tr>
+            <td class="bs-subcat-cell">
+              <div class="bs-subcat-header drop-zone"
+                   id="bsEquityDropZone"
+                   ondragover="allowDrop(event)"
+                   ondrop="dropOnBSZone(event, 'equity')">
+                <strong>Equity</strong>
+                <span class="subcat-total-right">
+                  <strong id="bsEquityTotal">0.00</strong>
+                </span>
+
+                <span class="placeholder-text" id="bsEquityPlaceholder">(drag accounts for equity here)</span>
+              </div>
+              <table class="inner-bs-table">
+                <tbody id="bsEquityAccounts"></tbody>
+              </table>
+            </td>
+          </tr>
+
+          <tr class="separator">
+            <td>
+              <strong>Total Liabilities &amp; Equity</strong>
+              <span class="subcat-total-right">
+                <strong id="bsTotalLiabEquity">0.00</strong>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button onclick="checkBalanceSheet()">✅ Check Balance Sheet</button>
+      <button onclick="showCorrectBS()">📝 Show Correct BS</button>
+      <div id="bsResult" class="result"></div>
+    </div>
+  </div>
+
+  <!-- Next Scenario -->
+  <button id="nextScenarioBtn" onclick="goToNextScenario()" disabled>
+    ➡️ Practice Another 5 Scenarios
+  </button>
+
+  <div class="footer">
+    <p class="developed-by" style="color: #7f8c8d;">
+      👩‍🏫 Developed by <strong>Professor Grace Haoqing Fan</strong>
+      of <strong>Singapore Management University</strong>
+      <p>For any questions or feedbacks, please email to gracefan@smu.edu.sg</p>
+    </p>
+  </div>
+
+</div>
+
+<!-- Correct Answer Modal (TB) -->
+<div id="correctAnswerModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeCorrectAnswer()">&times;</span>
+    <h2>Correct Trial Balance</h2>
+    <table class="compact-table">
+      <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Debit ($)</th>
+          <th>Credit ($)</th>
+        </tr>
+      </thead>
+      <tbody id="correctAnswerTB"></tbody>
+      <tfoot>
+        <tr class="totals-row">
+          <td>Totals</td>
+          <td id="correctTBTotalDebit">0.00</td>
+          <td id="correctTBTotalCredit">0.00</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- Correct IS Modal -->
+<div id="correctISModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeCorrectISModal()">&times;</span>
+    <h2>Correct Income Statement</h2>
+    <div style="display: flex; gap: 40px; margin-bottom: 20px;">
+      <div>
+        <h3>Correct Revenue Accounts</h3>
+        <ul id="correctISRevenueList"></ul>
+      </div>
+      <div>
+        <h3>Correct Operating Expense Accounts</h3>
+        <ul id="correctISOpExList"></ul>
+      </div>
+    </div>
+
+    <!-- Correct numeric lines -->
+    <table class="compact-table">
+      <tbody>
+        <tr><td>Revenue</td><td id="corrISRevenue"></td></tr>
+        <tr><td>Less: Cost of Goods Sold</td><td id="corrISCOGS"></td></tr>
+        <tr class="separator"><td>Gross Profit</td><td id="corrISGrossProfit"></td></tr>
+        <tr><td>Less: Operating Expenses</td><td id="corrISOpEx"></td></tr>
+        <tr class="separator"><td>Operating Income</td><td id="corrISOpIncome"></td></tr>
+        <tr><td>Less: Interest Expense</td><td id="corrISIntExp"></td></tr>
+        <tr class="separator"><td>Income Before Tax</td><td id="corrISIncomeBefTax"></td></tr>
+        <tr><td>Less: Tax Expense</td><td id="corrISTaxExp"></td></tr>
+        <tr class="separator"><td>Net Income</td><td id="corrISNetIncome"></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Correct BS Modal -->
+<div id="correctBSModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeCorrectBSModal()">&times;</span>
+    <h2>Correct Balance Sheet</h2>
+
+    <!-- We'll build a 'real' BS layout here. -->
+    <div id="correctBSOutput"></div>
+  </div>
+</div>
+
+<script src="js/scenarioData.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/trialBalance.js"></script>
+<script src="js/dragDrop.js"></script>
+<script src="js/incomeStatement.js"></script>
+<script src="js/closingEntries.js"></script>
+<script src="js/balanceSheet.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

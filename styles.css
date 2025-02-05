@@ -1,0 +1,493 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+h1 {
+  font-size: 2.0em;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2980b9;
+}
+
+.developed-by {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-top: 0.5em;
+  color: #555;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.intro {
+  margin-bottom: 25px;
+  font-size: 1.05em;
+  color: #34495e;
+}
+
+.scenarios-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.scenario-card {
+  background-color: #ecf0f1;
+  border-left: 5px solid #e67e22;
+  border-radius: 8px;
+  padding: 20px;
+  flex: 1;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.scenario-card h4 {
+  margin-bottom: 10px;
+  color: #d35400;
+}
+.scenario-card p {
+  font-size: 0.95em;
+}
+.scenario-hint-btn {
+  background-color: #f39c12;
+  color: #fff;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.tab-container {
+  display: flex;
+  border-bottom: 3px solid #bdc3c7;
+  margin-bottom: 25px;
+}
+.tab {
+  flex: 1;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #bdc3c7;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #2c3e50;
+  transition: background-color 0.3s, color 0.3s;
+}
+.tab:not(:last-child) {
+  border-right: 1px solid #bdc3c7;
+}
+.tab.active {
+  background-color: #2980b9;
+  color: #fff;
+}
+
+.content {
+  display: none;
+  animation: fadeIn 0.5s;
+}
+.content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+}
+th, td {
+  border: 1px solid #bdc3c7;
+  padding: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+th {
+  background-color: #2980b9;
+  color: #fff;
+  font-weight: bold;
+}
+.totals-row td {
+  font-weight: bold;
+  background-color: #ecf0f1;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 5px 8px 5px 0;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+button:hover:not(:disabled) {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.correct-block {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #d6e9c6;
+}
+.incorrect-block {
+  background-color: #f2dede;
+  color: #a94442;
+  border: 1px solid #ebccd1;
+}
+
+input[type="number"] {
+  padding: 8px;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  width: 120px;
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.statement {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f6f9fc;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+}
+.statement h3 {
+  margin-top: 0;
+  color: #2980b9;
+  margin-bottom: 10px;
+}
+.fs-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+.fs-table td {
+  border: none;
+  padding: 5px;
+}
+.separator td {
+  border-top: 1px solid #ccc;
+  padding-top: 10px !important;
+}
+.section-header td {
+  border-bottom: 2px solid #ccc;
+  background-color: #ecf0f1;
+}
+
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.9em;
+  color: #7f8c8d;
+}
+
+#nextScenarioBtn {
+  display: block;
+  margin: 30px auto 0 auto;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+#nextScenarioBtn:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+  .scenarios-row {
+    flex-direction: column;
+  }
+  .scenario-card {
+    margin-bottom: 15px;
+  }
+}
+
+/* Highlight entire row (TB) */
+.invalid-row td {
+  border: 2px solid red !important;
+}
+/* Highlight input fields (IS / BS) */
+.invalid-field {
+  border: 2px solid red !important;
+}
+
+.hint-btn {
+  margin-left: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+}
+.hint-btn:hover {
+  background-color: #2980b9;
+}
+
+.compact-table {
+  font-size: 0.9rem;       
+  line-height: 1.2;       
+}
+
+.compact-table th, .compact-table td {
+  padding: 4px 6px;
+}
+
+.compact-table .totals-row td {
+  font-weight: bold;
+}
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+  border-radius: 8px;
+}
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+}
+
+/* Drop-zone styling */
+.drop-zone {
+  border: 2px dashed #bdc3c7;
+  border-radius: 6px;
+  padding: 6px;
+  position: relative;
+}
+.drop-zone.over {
+  background-color: #d6eaf8;
+  border-color: #5dade2;
+}
+.placeholder-text {
+  font-size: 0.95em;
+  color: #7f8c8d;
+  margin-left: 8px;
+}
+.dropped-items {
+  margin-top: 8px;
+}
+
+/* Real BS table style */
+.real-bs-table td {
+  border: none;
+}
+/* Subcat cell: big container for each subcat row */
+.bs-subcat-cell {
+  border: 1px solid #bdc3c7;
+  padding: 0;
+  vertical-align: top;
+}
+/* subcat header row */
+.bs-subcat-header {
+  padding: 8px;
+  background-color: #ecf0f1;
+  position: relative;
+}
+
+/* The subcat total floats on the same line, right side. */
+.subcat-total-right {
+  float: right;
+}
+
+/* inner table for listing accounts */
+.inner-bs-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.inner-bs-table td {
+  border: none;
+  padding: 2px 8px;
+}
+
+/* each dropped account row => name left, amount right, remove button optional */
+.bs-account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.bs-acc-name {
+  flex: 1;
+  padding-right: 10px;
+}
+.bs-acc-amount {
+  width: 80px;
+  text-align: right;
+  position: relative;
+}
+.remove-button {
+  cursor: pointer;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 10px;
+  display: none; /* show on hover */
+}
+.bs-account-row:hover .remove-button {
+  display: inline;
+}
+
+.dropright {
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+}
+.dropbtn {
+  background-color: #fff;
+  color: #2c3e50;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 180px;
+  text-align: left;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.dropbtn:hover {
+  border-color: #2980b9;
+  background-color: #f0f4f8;
+}
+.dropright-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 180px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 10;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+.dropright-content .submenu {
+  position: relative;
+}
+.dropright-content .submenu > button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: background-color 0.3s;
+}
+.dropright-content .submenu > button:hover {
+  background-color: #ecf0f1;
+}
+
+.submenu-content {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background-color: #fff;
+  min-width: 180px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 20;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  margin-left: 1px;
+}
+.menu-item {
+  padding: 10px;
+  cursor: pointer;
+  color: #2c3e50;
+  transition: background-color 0.3s;
+}
+.menu-item:hover {
+  background-color: #ecf0f1;
+}
+.submenu:hover .submenu-content {
+  display: block;
+}
+
+/* A wrapper for each dragged account in Revenue/Expenses */
+.account-item {
+  position: relative;
+  margin: 4px 0;
+  padding: 4px 8px;
+  background-color: #ecf0f1;
+  border-radius: 4px;
+}
+
+/* The remove button (red cross) is hidden by default */
+.account-item .remove-button {
+  display: none;
+  float: right;      /* or position: absolute; right: 8px; if you prefer */
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Show the red cross when hovering over the account-item */
+.account-item:hover .remove-button {
+  display: inline;
+}
